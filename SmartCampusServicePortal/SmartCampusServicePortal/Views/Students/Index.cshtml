@@ -1,0 +1,43 @@
+@model IEnumerable<Student>
+@{
+    ViewData["Title"] = "Student Directory";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h3 class="fw-bold mb-0">Student Directory</h3>
+        <small class="text-muted">List of all registered campus students</small>
+    </div>
+    <a asp-action="Register" class="btn btn-primary"><i class="bi bi-person-plus me-1"></i>Register New Student</a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr><th>Roll / Student ID</th><th>Full Name</th><th>Department</th><th>Email</th><th>Phone</th><th>Registered Date</th><th class="text-end">Actions</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var s in Model)
+                {
+                    <tr>
+                        <td class="fw-bold text-primary">@s.StudentIdNumber</td>
+                        <td>@s.FullName</td>
+                        <td><span class="badge bg-light text-dark border">@s.Department</span></td>
+                        <td>@s.Email</td>
+                        <td>@s.PhoneNumber</td>
+                        <td class="small text-muted">@s.RegisteredDate.ToString("dd MMM yyyy")</td>
+                        <td class="text-end">
+                            <a asp-action="Details" asp-route-id="@s.Id" class="btn btn-sm btn-outline-info"><i class="bi bi-eye me-1"></i>Profile</a>
+                            <a asp-action="Dashboard" asp-route-rollNo="@s.StudentIdNumber" class="btn btn-sm btn-outline-secondary"><i class="bi bi-speedometer2 me-1"></i>Portal</a>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr><td colspan="7" class="text-center text-muted py-4">No students registered yet.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

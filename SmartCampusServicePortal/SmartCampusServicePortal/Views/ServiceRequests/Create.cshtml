@@ -1,0 +1,69 @@
+@model ServiceRequest
+@{
+    ViewData["Title"] = "Submit Service Request";
+}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3 border-bottom">
+                <h4 class="fw-bold mb-0 text-dark"><i class="bi bi-tools me-2 text-primary"></i>Submit Campus Service Request</h4>
+                <small class="text-muted">Fill out the details below to request campus assistance or maintenance</small>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="StudentName" class="form-label fw-semibold"></label>
+                        <input asp-for="StudentName" class="form-control" placeholder="Enter student full name" list="studentList" />
+                        <datalist id="studentList">
+                            @if (ViewBag.Students != null)
+                            {
+                                @foreach (var s in ViewBag.Students)
+                                {
+                                    <option value="@s.Text"></option>
+                                }
+                            }
+                        </datalist>
+                        <span asp-validation-for="StudentName" class="text-danger small"></span>
+                        <div class="form-text">Type the registered student's name (auto-suggestions available).</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="StudentRollNo" class="form-label fw-semibold"></label>
+                        <input asp-for="StudentRollNo" class="form-control" placeholder="e.g. STU101 (Optional)" />
+                        <span asp-validation-for="StudentRollNo" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Category" class="form-label fw-semibold"></label>
+                        <select asp-for="Category" class="form-select">
+                            <option value="">-- Choose Category --</option>
+                            <option value="IT Support">IT Support (Wi-Fi, Computer Labs, Portal)</option>
+                            <option value="Hostel">Hostel (Room repair, Water, Facilities)</option>
+                            <option value="Library">Library (Books, Cards, Study spaces)</option>
+                            <option value="Maintenance">Maintenance (Electrical, Plumbing, Furniture)</option>
+                        </select>
+                        <span asp-validation-for="Category" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Description" class="form-label fw-semibold"></label>
+                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Describe the issue, location, and any specific details..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a asp-action="Index" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i> Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4"><i class="bi bi-send-fill me-1"></i> Submit Request</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

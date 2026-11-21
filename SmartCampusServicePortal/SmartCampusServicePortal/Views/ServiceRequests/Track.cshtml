@@ -1,0 +1,45 @@
+@model ServiceRequest
+@{
+    ViewData["Title"] = "Track Request";
+}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white py-3">
+                <h5 class="fw-bold mb-0"><i class="bi bi-search me-2 text-primary"></i>Track Request Status</h5>
+            </div>
+            <div class="card-body">
+                <form method="get" asp-action="Track" class="d-flex gap-2">
+                    <input type="number" name="ticketId" class="form-control" placeholder="Enter ticket number, e.g. 1" min="1" required />
+                    <button type="submit" class="btn btn-primary">Track</button>
+                </form>
+            </div>
+        </div>
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-warning">@ViewBag.ErrorMessage</div>
+        }
+
+        @if (Model != null)
+        {
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                    <strong>Ticket #@Model.Id</strong>
+                    <partial name="_StatusBadge" model="Model.Status" />
+                </div>
+                <div class="card-body">
+                    <p class="mb-1"><strong>@Model.StudentName</strong> <span class="text-muted">(@(Model.StudentRollNo ?? "N/A"))</span></p>
+                    <p class="mb-1"><span class="badge bg-light text-dark border">@Model.Category</span></p>
+                    <p class="mb-2">@Model.Description</p>
+                    <p class="small text-muted mb-2">Submitted @Model.SubmissionDate.ToString("dd MMM yyyy, hh:mm tt")</p>
+                    <div class="p-2 bg-light border rounded small">
+                        <strong>Admin remarks:</strong>
+                        @(string.IsNullOrWhiteSpace(Model.AdminRemarks) ? "No remarks entered yet." : Model.AdminRemarks)
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

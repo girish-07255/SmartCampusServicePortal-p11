@@ -1,0 +1,39 @@
+@model ServiceRequest
+@{
+    ViewData["Title"] = "Update Status";
+    var statuses = new[] { "Pending", "In Progress", "Completed" };
+}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="fw-bold mb-0"><i class="bi bi-arrow-repeat me-2 text-primary"></i>Update Status - Ticket #@Model.Id</h5>
+            </div>
+            <div class="card-body p-4">
+                <p class="mb-1"><strong>@Model.StudentName</strong> <span class="text-muted">(@Model.StudentRollNo)</span></p>
+                <p class="small text-muted">@Model.Category - @Model.Description</p>
+
+                <form asp-action="UpdateStatus" asp-route-id="@Model.Id" method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">New Status</label>
+                        <select name="status" class="form-select">
+                            @foreach (var s in statuses)
+                            {
+                                <option value="@s" selected="@(s == Model.Status)">@s</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Admin Remarks</label>
+                        <textarea name="adminRemarks" class="form-control" rows="3" maxlength="500" placeholder="e.g. Plumber assigned to inspect Block B heater.">@Model.AdminRemarks</textarea>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save me-1"></i>Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

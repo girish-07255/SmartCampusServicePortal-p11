@@ -1,0 +1,55 @@
+@model ServiceRequest
+@{
+    ViewData["Title"] = "Request #" + Model.Id;
+}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-9 col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="fw-bold mb-0"><i class="bi bi-info-circle-fill text-primary me-2"></i>Service Request #@Model.Id</h5>
+                    <small class="text-muted">Submitted on @Model.SubmissionDate.ToString("dd MMMM yyyy, hh:mm tt")</small>
+                </div>
+                <partial name="_StatusBadge" model="Model.Status" />
+            </div>
+            <div class="card-body p-4">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Student Name:</dt>
+                    <dd class="col-sm-8">@Model.StudentName</dd>
+
+                    <dt class="col-sm-4">Roll Number:</dt>
+                    <dd class="col-sm-8">@(Model.StudentRollNo ?? "N/A")</dd>
+
+                    <dt class="col-sm-4">Service Category:</dt>
+                    <dd class="col-sm-8"><span class="badge bg-light text-dark border">@Model.Category</span></dd>
+
+                    <dt class="col-sm-4">Issue Description:</dt>
+                    <dd class="col-sm-8"><div class="p-2 bg-light border rounded small">@Model.Description</div></dd>
+
+                    <dt class="col-sm-4">Status:</dt>
+                    <dd class="col-sm-8 fw-bold">@Model.Status</dd>
+
+                    <dt class="col-sm-4">Admin Remarks:</dt>
+                    <dd class="col-sm-8">
+                        @if (string.IsNullOrWhiteSpace(Model.AdminRemarks))
+                        {
+                            <em class="text-muted">No remarks entered yet.</em>
+                        }
+                        else
+                        {
+                            @Model.AdminRemarks
+                        }
+                    </dd>
+                </dl>
+            </div>
+            <div class="card-footer bg-white d-flex justify-content-between py-3">
+                <a asp-action="Index" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back to Requests</a>
+                <div class="d-flex gap-2">
+                    <a asp-controller="Admin" asp-action="UpdateStatus" asp-route-id="@Model.Id" class="btn btn-warning"><i class="bi bi-arrow-repeat me-1"></i>Update Status</a>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"><i class="bi bi-pencil me-1"></i>Edit Request</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

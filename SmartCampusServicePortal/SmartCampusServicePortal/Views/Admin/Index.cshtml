@@ -1,0 +1,83 @@
+@model IEnumerable<ServiceRequest>
+@{
+    ViewData["Title"] = "Admin Management Portal";
+    var categories = new[] { "IT Support", "Hostel", "Library", "Maintenance" };
+    var statuses = new[] { "Pending", "In Progress", "Completed" };
+    string? selCategory = ViewBag.Category as string;
+    string? selStatus = ViewBag.Status as string;
+}
+
+<div class="d-flex justify-content-between align-items-center pb-2 mb-3 border-bottom">
+    <div>
+        <h3 class="fw-bold mb-0"><i class="bi bi-shield-fill-check text-primary me-2"></i>Admin Management Portal</h3>
+        <small class="text-muted">Review student campus requests, filter by department, and update resolution status</small>
+    </div>
+    <span class="btn btn-primary disabled"><i class="bi bi-list-check me-1"></i>Total Displayed: @Model.Count()</span>
+</div>
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get" asp-action="Index" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label small text-muted text-uppercase"><i class="bi bi-funnel me-1"></i>Filter by Category</label>
+                <select name="category" class="form-select">
+                    <option value="">-- All Categories --</option>
+                    @foreach (var c in categories)
+                    {
+                        <option value="@c" selected="@(c == selCategory)">@c</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small text-muted text-uppercase"><i class="bi bi-clock me-1"></i>Filter by Status</label>
+                <select name="status" class="form-select">
+                    <option value="">-- All Statuses --</option>
+                    @foreach (var s in statuses)
+                    {
+                        <option value="@s" selected="@(s == selStatus)">@s</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-1"><i class="bi bi-funnel-fill me-1"></i>Apply Filters</button>
+                <a asp-action="Index" class="btn btn-outline-secondary"><i class="bi bi-arrow-counterclockwise me-1"></i>Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Ticket</th><th>Student Name</th><th>Category</th><th>Description</th><th>Date Submitted</th><th>Current Status</th><th>Admin Remarks</th><th class="text-end">Update Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="fw-bold"><a asp-controller="ServiceRequests" asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none">#@item.Id</a></td>
+                        <td>
+                            <div>@item.StudentName</div>
+                            <small class="text-muted">@item.StudentRollNo</small>
+                        </td>
+                        <td><span class="badge bg-light text-dark border">@item.Category</span></td>
+                        <td class="desc-cell">@item.Description</td>
+                        <td class="small text-muted">@item.SubmissionDate.ToString("dd MMM yyyy")</td>
+                        <td><partial name="_StatusBadge" model="item.Status" /></td>
+                        <td class="small text-muted">@(string.IsNullOrWhiteSpace(item.AdminRemarks) ? "—" : item.AdminRemarks)</td>
+                        <td class="text-end">
+                            <a asp-action="UpdateStatus" asp-route-id="@item.Id" class="btn btn-sm btn-primary"><i class="bi bi-arrow-repeat me-1"></i>Change Status</a>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr><td colspan="8" class="text-center text-muted py-4">No requests match the selected filters.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

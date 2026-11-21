@@ -1,0 +1,54 @@
+@model ServiceRequest
+@{
+    ViewData["Title"] = "Edit Request #" + Model.Id;
+}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h4 class="fw-bold mb-0"><i class="bi bi-pencil-square me-2 text-primary"></i>Edit Request #@Model.Id</h4>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="mb-3">
+                        <label asp-for="StudentName" class="form-label fw-semibold"></label>
+                        <input asp-for="StudentName" class="form-control" />
+                        <span asp-validation-for="StudentName" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="StudentRollNo" class="form-label fw-semibold"></label>
+                        <input asp-for="StudentRollNo" class="form-control" />
+                        <span asp-validation-for="StudentRollNo" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Category" class="form-label fw-semibold"></label>
+                        <select asp-for="Category" class="form-select">
+                            <option value="IT Support">IT Support</option>
+                            <option value="Hostel">Hostel</option>
+                            <option value="Library">Library</option>
+                            <option value="Maintenance">Maintenance</option>
+                        </select>
+                        <span asp-validation-for="Category" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-4">
+                        <label asp-for="Description" class="form-label fw-semibold"></label>
+                        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save me-1"></i>Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

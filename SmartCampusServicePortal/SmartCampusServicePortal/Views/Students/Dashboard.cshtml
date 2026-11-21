@@ -1,0 +1,59 @@
+@{
+    ViewData["Title"] = "Student Portal";
+    var student = ViewBag.Student as Student;
+    var requests = ViewBag.Requests as List<ServiceRequest> ?? new List<ServiceRequest>();
+}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-9">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white py-3"><h5 class="fw-bold mb-0"><i class="bi bi-speedometer2 me-2 text-primary"></i>Student Portal</h5></div>
+            <div class="card-body">
+                <form method="get" asp-action="Dashboard" class="d-flex gap-2">
+                    <input type="text" name="rollNo" class="form-control" placeholder="Enter your Roll Number, e.g. STU101" value="@student?.StudentIdNumber" />
+                    <button type="submit" class="btn btn-primary">Open</button>
+                </form>
+            </div>
+        </div>
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-warning">@ViewBag.ErrorMessage</div>
+        }
+
+        @if (student != null)
+        {
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>@student.FullName</strong>
+                        <span class="text-muted">(@student.StudentIdNumber) - @student.Department</span>
+                    </div>
+                    <a asp-controller="ServiceRequests" asp-action="Create" class="btn btn-sm btn-primary"><i class="bi bi-plus-circle me-1"></i>New Request</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead class="table-light"><tr><th>Ticket</th><th>Category</th><th>Description</th><th>Date</th><th>Status</th><th>Admin Remarks</th></tr></thead>
+                        <tbody>
+                            @foreach (var r in requests)
+                            {
+                                <tr>
+                                    <td class="fw-bold">#@r.Id</td>
+                                    <td>@r.Category</td>
+                                    <td class="desc-cell">@r.Description</td>
+                                    <td class="small text-muted">@r.SubmissionDate.ToString("dd MMM yyyy")</td>
+                                    <td><partial name="_StatusBadge" model="r.Status" /></td>
+                                    <td class="small text-muted">@(string.IsNullOrWhiteSpace(r.AdminRemarks) ? "—" : r.AdminRemarks)</td>
+                                </tr>
+                            }
+                            @if (!requests.Any())
+                            {
+                                <tr><td colspan="6" class="text-center text-muted py-4">No requests submitted yet.</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</div>
